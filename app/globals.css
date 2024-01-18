@@ -1,3 +1,4 @@
+/* globals.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -16,12 +17,401 @@
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+* {
+  box-sizing: border-box;
 }
+
+.video-container::before {
+  content: "";
+  display: block;
+  padding-top: 56.25%;
+}
+
+.video-container .v-vlite {
+  width: 70%;
+  height: 70%;
+  position: absolute;
+  top: 20%;
+  left: 10%;
+  z-index: 1;
+}
+
+.v-vlite:not(.v-forceControls) iframe.vlite-js {
+  pointer-events: none;
+}
+
+.v-vlite .vlite-js {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+
+.v-vlite .v-overlayVideo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+
+}
+
+.v-vlite a, .v-vlite div, .v-vlite form, .v-vlite label, .v-vlite li, .v-vlite p, .v-vlite span, .v-vlite ul {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+.v-vlite .v-overlayVideo .v-overlayLeft {
+  left: 0;
+}
+
+.v-vlite .v-overlayVideo .v-overlayLeft, .v-vlite .v-overlayVideo .v-overlayRight {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.v-vlite .v-overlayVideo .v-overlayRight {
+  right: 0;
+}
+
+overlayVideo .v-overlayRight {
+  position: absolute;
+  top: 0;
+  width: 30%;
+  height: 100%;
+}
+
+.v-vlite .v-loader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  transition: opacity .2s ease-in,visibility .2s ease-in;
+}
+
+.v-vlite .v-loader .v-loaderContent {
+  margin: 0 auto;
+  width: 70px;
+  text-align: center;
+}
+
+.v-vlite .v-loader .v-loaderContent .v-loaderBounce1 {
+  -webkit-animation-delay: -.32s;
+  animation-delay: -.32s;
+}
+
+.v-vlite .v-loader .v-loaderContent>div {
+  width: 18px;
+  height: 18px;
+  background-color: #fff;
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: loader 1.4s ease-in-out infinite both;
+  animation: loader 1.4s ease-in-out infinite both;
+}
+
+.v-vlite .v-loader .v-loaderContent .v-loaderBounce2 {
+  -webkit-animation-delay: -.16s;
+  animation-delay: -.16s;
+}
+
+.v-vlite .v-loader .v-loaderContent>div {
+  width: 18px;
+  height: 18px;
+  background-color: #fff;
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: loader 1.4s ease-in-out infinite both;
+  animation: loader 1.4s ease-in-out infinite both;
+}
+
+.v-vlite .v-loader .v-loaderContent>div {
+  width: 18px;
+  height: 18px;
+  background-color: #fff;
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: loader 1.4s ease-in-out infinite both;
+  animation: loader 1.4s ease-in-out infinite both;
+}
+
+.v-vlite.v-paused:not(.v-firstStart) .v-poster, .v-vlite.v-playing .v-bigPlayButton, .v-vlite.v-playing .v-poster {
+  visibility: hidden;
+  opacity: 0;
+}
+
+
+
+.v-vlite .v-poster {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-size: cover;
+  cursor: pointer;
+  visibility: hidden;
+  opacity: 0;
+  z-index: 2;
+}
+
+.v-vlite .v-bigPlayButton, .v-vlite .v-bigPlayButton .v-iconBigPlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.v-vlite .v-bigPlayButton {
+  width: 65px;
+  height: 65px;
+  cursor: pointer;
+  z-index: 2;
+  transition: opacity .2s ease-in;
+  transition-delay: .1s;
+}
+
+.v-vlite .v-bigPlayButton .v-iconBigPlay {
+  display: block;
+}
+
+.v-iconBigPlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.v-vlite .v-bigPlayButton svg {
+  fill: #8C74B2;
+  background-color: #B6A8CD;
+  border-radius: 50px;
+  width: 100px;
+  height: 100px;
+}
+
+svg {
+  overflow: hidden;
+  vertical-align: middle;
+}
+
+.video-container .v-bigPlayButton svg *, .video-container .v-controlBarContent svg * {
+  fill: #8C74B2;
+}
+
+.v-vlite .v-controlBar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  padding-top: 3px;
+  text-align: right;
+  padding-left: 10px;
+  padding-right: 10px;
+  background: linear-gradient(0deg,#000,hsla(0,0%,100%,0));
+  transition: .25s ease-in;
+
+}
+
+.v-vlite .v-progressBar {
+  position: absolute;
+  top: 0;
+  left: 10px;
+  right: 10px;
+  height: 3px;
+  background-color: rgba(0,0,0,.2);
+  transition: height .1s ease-out,top .1s ease-out;
+  z-index: 1;
+}
+
+.v-vlite .v-progressBar .v-progressSeek {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: linear-gradient(135deg,#ff0053,#ee5b35);
+  border-radius: 0 4px 4px 0;
+  transition: all .1s ease-out;
+}
+
+.video-container .v-progressBar .v-progressSeek {
+  background: #8C74B2!important;
+}
+
+.v-vlite .v-progressBar .v-progressInput {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.v-vlite .v-controlBar .v-controlBarContent {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #E0DBE8;
+ opacity: 0.8;
+ left: 0;
+ 
+}
+
+.video-container .v-controlBarContent {
+  display: flex;
+  z-index: 5;
+}
+
+.v-vlite .v-playPauseButton {
+  position: relative;
+  float: left;
+  width: 40px;
+  height: 100%;
+  cursor: pointer;
+}
+
+.v-vlite .v-time {
+  color: #fff;
+  font-size: 12px;
+  float: left;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.video-container .v-time {
+  order: 2;
+  padding-top: 3px;
+  color: #8C74B2!important;
+}
+
+.v-vlite .v-volume {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 100%;
+  cursor: pointer;
+}
+
+.v-volume:not(.v-muted) .v-iconVolumeHigh {
+  display: block;
+}
+
+.v-vlite .v-volume .v-playerIcon {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.v-vlite .v-volume svg {
+  fill: #fff;
+  transition: opacity .25s;
+  opacity: .85;
+  width: 18px;
+  height: 18px;
+}
+
+.v-vlite .v-volume .v-playerIcon {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.v-vlite .v-volume svg {
+  fill: #fff;
+  transition: opacity .25s;
+  opacity: .85;
+  width: 18px;
+  height: 18px;
+}
+
+.v-vlite .v-fullscreen {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 100%;
+  cursor: pointer;
+}
+
+.video-container .v-fullscreen {
+  order: 3;
+  margin-left: auto;
+}
+
+.v-vlite a, .v-vlite div, .v-vlite form, .v-vlite label, .v-vlite li, .v-vlite p, .v-vlite span, .v-vlite ul {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+.v-vlite .v-fullscreen.v-exit .v-iconShrink, .v-vlite .v-fullscreen:not(.v-exit) .v-iconFullscreen {
+  display: block;
+}
+
+.v-vlite .v-fullscreen .v-playerIcon {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.v-vlite .v-fullscreen svg {
+  fill: #fff;
+  transition: opacity .25s;
+  opacity: .85;
+  width: 30px;
+  height: 30px;
+}
+
+.video-container .v-bigPlayButton svg * {
+  fill: #8C74B2;
+}
+
+.video-container .v-controlBarContent svg * {
+  fill: #8C74B2;
+}
+.v-vlite .v-fullscreen .v-playerIcon {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+}
+
+container .v-controlBarContent svg * {
+  fill: #8C74B2;
+}
+
