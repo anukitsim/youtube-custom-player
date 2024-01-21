@@ -6,11 +6,64 @@ export default function Home() {
   const playerRef = useRef(null);
   const [player, setPlayer] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [progress, setProgress] = useState(0);
+  
+
+  function formatTime(timeInSeconds) {
+    const minutes = Math.floor(timeInSeconds / 60);
+    const seconds = Math.floor(timeInSeconds % 60);
+    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
+      2,
+      "0"
+    )}`;
+  }
+
+  let interval;
+
+
+  const startInterval = () => {
+    clearInterval(interval);
+    interval = setInterval(() => {
+      const currentTime = player.getCurrentTime();
+      setCurrentTime(currentTime);
+
+      // Calculate the progress percentage
+      const progressPercentage = (currentTime / duration) * 100;
+      setProgress(progressPercentage);
+    }, 1000);
+  };
+
+  useEffect(() => {
+    let isMounted = true;
+    
+    const handleTimeChange = () => {
+      if (isMounted) {
+        const currentTime = player.getCurrentTime();
+        setCurrentTime(currentTime);
+  
+        // Calculate the progress percentage
+        const progressPercentage = (currentTime / duration) * 100;
+        setProgress(progressPercentage);
+      }
+    };
+  
+    if (player) {
+      player.addEventListener("onTimeUpdate", handleTimeChange);
+    }
+  
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, [player, duration]);
+  
 
   useEffect(() => {
     const loadPlayer = () => {
       const newPlayer = new window.YT.Player(playerRef.current, {
-        videoId: "qUYkBG488B0",
+        videoId: "lPpbgcdGMxc",
         playerVars: {
           controls: 0,
           rel: 0,
@@ -23,6 +76,18 @@ export default function Home() {
             } else {
               setIsPlaying(false);
             }
+          },
+          onReady: (event) => {
+            setDuration(event.target.getDuration());
+          },
+          onPlaybackQualityChange: (event) => {
+            setDuration(event.target.getDuration());
+          },
+          onPlaybackRateChange: (event) => {
+            setDuration(event.target.getDuration());
+          },
+          onApiChange: (event) => {
+            setDuration(event.target.getDuration());
           },
         },
       });
@@ -42,6 +107,7 @@ export default function Home() {
     }
 
     return () => {
+      clearInterval(interval);
       window.onYouTubeIframeAPIReady = null;
     };
   }, []);
@@ -52,6 +118,7 @@ export default function Home() {
         player.pauseVideo();
       } else {
         player.playVideo();
+        startInterval();
       }
     }
   };
@@ -61,26 +128,32 @@ export default function Home() {
   };
 
   const handleFullscreenToggle = () => {
-    const videoContainer = document.querySelector('.video-container');
+    const videoContainer = document.querySelector(".video-container");
 
     if (document.fullscreenElement) {
       if (document.exitFullscreen) {
         document.exitFullscreen();
-      } else if (document.mozCancelFullScreen) { // Firefox
+      } else if (document.mozCancelFullScreen) {
+        // Firefox
         document.mozCancelFullScreen();
-      } else if (document.webkitExitFullscreen) { // Chrome, Safari and Opera
+      } else if (document.webkitExitFullscreen) {
+        // Chrome, Safari and Opera
         document.webkitExitFullscreen();
-      } else if (document.msExitFullscreen) { // IE/Edge
+      } else if (document.msExitFullscreen) {
+        // IE/Edge
         document.msExitFullscreen();
       }
     } else {
       if (videoContainer.requestFullscreen) {
         videoContainer.requestFullscreen();
-      } else if (videoContainer.mozRequestFullScreen) { // Firefox
+      } else if (videoContainer.mozRequestFullScreen) {
+        // Firefox
         videoContainer.mozRequestFullScreen();
-      } else if (videoContainer.webkitRequestFullscreen) { // Chrome, Safari and Opera
+      } else if (videoContainer.webkitRequestFullscreen) {
+        // Chrome, Safari and Opera
         videoContainer.webkitRequestFullscreen();
-      } else if (videoContainer.msRequestFullscreen) { // IE/Edge
+      } else if (videoContainer.msRequestFullscreen) {
+        // IE/Edge
         videoContainer.msRequestFullscreen();
       }
     }
@@ -95,23 +168,47 @@ export default function Home() {
       }
     };
 
-    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
 
     return () => {
-      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
     };
   }, []);
+
+  const handleVideoOverlayClick = () => {
+    togglePlayPause();
+  };
+
+  useEffect(() => {
+    const handleTimeChange = () => {
+      setCurrentTime(player.getCurrentTime());
+    };
+
+    if (player) {
+      player.addEventListener("onTimeUpdate", handleTimeChange);
+    }
+
+    return () => {
+      if (player) {
+        player.removeEventListener("onTimeUpdate", handleTimeChange);
+      }
+    };
+  }, [player]);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="video-container js-media-container js-video-container">
         <div className="v-vlite v-paused" tabIndex="0">
-        <div
-          ref={playerRef}
-          className="vlite-js js-yt-player rounded-lg"
-          data-youtube-id="qUYkBG488B0"
-        ></div>
-          <div className="v-overlayVideo" data-v-toggle-play-pause="">
+          <div
+            ref={playerRef}
+            className="vlite-js js-yt-player rounded-lg"
+            data-youtube-id="lPpbgcdGMxc"
+          ></div>
+          <div
+            className="v-overlayVideo"
+            data-v-toggle-play-pause=""
+            onClick={handleVideoOverlayClick}
+          >
             <div
               className="v-overlayLeft"
               data-v-fast-forward=""
@@ -139,7 +236,7 @@ export default function Home() {
             </div>
           </div>
 
-          {!isPlaying && ( 
+          {!isPlaying && (
             <div
               className="v-bigPlayButton"
               data-v-toggle-play-pause=""
@@ -155,14 +252,24 @@ export default function Home() {
 
           <div className="v-controlBar">
             <div className="v-progressBar">
-              <div className="v-progressSeek"></div>
+              <div
+                className="v-progressSeek"
+                style={{ width: `${progress}%` }}
+              ></div>
               <input
                 type="range"
                 className="v-progressInput"
                 min="0"
                 max="100"
                 step="0.01"
-                defaultValue="0"
+                value={progress}
+                onChange={(e) => {
+                  const seekToTime = (e.target.value / 100) * duration;
+                  player.seekTo(seekToTime, true);
+                  setCurrentTime(seekToTime);
+                }}
+                onMouseDown={() => clearInterval(interval)} // Clear the interval during seeking
+                onMouseUp={() => startInterval()} // Restart the interval after seeking
                 orient="horizontal"
               />
             </div>
@@ -187,8 +294,9 @@ export default function Home() {
                 )}
               </div>
               <div className="v-time">
-                <span className="v-currentTime">00:05</span>&nbsp;/&nbsp;
-                <span className="v-duration">04:25</span>
+                <span className="v-currentTime">{formatTime(currentTime)}</span>
+                &nbsp;/&nbsp;
+                <span className="v-duration">{formatTime(duration)}</span>
               </div>
               <div className="v-volume">
                 <span className="v-playerIcon v-iconVolumeHigh">

@@ -21,18 +21,50 @@
   box-sizing: border-box;
 }
 
+
+.video-container {
+  position: relative;
+  width: 100%; /* Adjust the width as needed */
+  max-width: 800px; /* Set a maximum width if necessary */
+  margin: 0 auto; /* Center the container */
+}
+
+
 .video-container::before {
   content: "";
   display: block;
   padding-top: 56.25%;
 }
 
-.video-container .v-vlite {
-  width: 70%;
-  height: 70%;
+.video-container .custom-overlay {
   position: absolute;
-  top: 20%;
-  left: 10%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.5); /* Adjust the transparency as needed */
+  z-index: 100; /* Ensure it's above other elements */
+}
+
+.video-container .vlite-js {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+  object-fit: cover;
+  z-index: 1;
+}
+
+
+.video-container .v-vlite {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
   z-index: 1;
 }
 
@@ -55,8 +87,32 @@
   top: 0;
   left: 0;
   width: 100%;
-
+  height: 100%;
 }
+
+.v-vlite .v-overlayLeft,
+.v-vlite .v-overlayRight {
+  position: absolute;
+  top: 0;
+  width: 50%; /* Adjust if needed */
+  height: 100%;
+}
+
+.v-vlite .v-overlayLeft {
+  left: 0;
+}
+
+.v-vlite .v-overlayRight {
+  right: 0;
+}
+
+.overlayVideo .v-overlayRight {
+  position: absolute;
+  top: 0;
+  width: 30%; /* Adjust if needed */
+  height: 100%;
+}
+
 
 .v-vlite a, .v-vlite div, .v-vlite form, .v-vlite label, .v-vlite li, .v-vlite p, .v-vlite span, .v-vlite ul {
   margin: 0;
@@ -81,7 +137,7 @@
   right: 0;
 }
 
-overlayVideo .v-overlayRight {
+.overlayVideo .v-overlayRight {
   position: absolute;
   top: 0;
   width: 30%;
@@ -206,6 +262,7 @@ overlayVideo .v-overlayRight {
   border-radius: 50px;
   width: 100px;
   height: 100px;
+
 }
 
 svg {
@@ -219,28 +276,30 @@ svg {
 
 .v-vlite .v-controlBar {
   position: absolute;
-  bottom: 0;
+  
+  bottom: -5%;
   left: 0;
   width: 100%;
-  height: 50px;
+  height: 25px;
   padding-top: 3px;
   text-align: right;
-  padding-left: 10px;
-  padding-right: 10px;
-  background: linear-gradient(0deg,#000,hsla(0,0%,100%,0));
+ 
+
+  background: #B6A8CD;
   transition: .25s ease-in;
+  z-index: 100;
+  box-sizing: border-box;
 
 }
-
 .v-vlite .v-progressBar {
   position: absolute;
   top: 0;
-  left: 10px;
+  left: 0;
   right: 10px;
-  height: 3px;
-  background-color: rgba(0,0,0,.2);
-  transition: height .1s ease-out,top .1s ease-out;
-  z-index: 1;
+  height: 10px;
+  background-color: white;
+  transition: height 0.1s ease-out, top 0.1s ease-out;
+  z-index: 999;
 }
 
 .v-vlite .v-progressBar .v-progressSeek {
@@ -248,16 +307,16 @@ svg {
   top: 0;
   left: 0;
   width: 0;
-  height: 100%;
-  background: linear-gradient(135deg,#ff0053,#ee5b35);
+  height: 90%;
+  
   border-radius: 0 4px 4px 0;
-  transition: all .1s ease-out;
+  transition: all 0.1s ease-out;
 }
+
 
 .video-container .v-progressBar .v-progressSeek {
   background: #8C74B2!important;
 }
-
 .v-vlite .v-progressBar .v-progressInput {
   position: absolute;
   top: 0;
@@ -269,26 +328,32 @@ svg {
   opacity: 0;
 }
 
-.v-vlite .v-controlBar .v-controlBarContent {
+.v-vlite .v-progressBar .v-progressInput {
   position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  background-color: #E0DBE8;
- opacity: 0.8;
- left: 0;
- 
+  margin: 0;
+  cursor: pointer;
+  
 }
+
 
 .video-container .v-controlBarContent {
   display: flex;
   z-index: 5;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+  width: 100%;
+  background-color: white;
+ 
 }
 
 .v-vlite .v-playPauseButton {
   position: relative;
-  float: left;
-  width: 40px;
-  height: 100%;
+  width: 30px;
   cursor: pointer;
 }
 
@@ -378,6 +443,7 @@ svg {
   display: block;
 }
 
+
 .v-vlite .v-fullscreen .v-playerIcon {
   display: none;
   position: absolute;
@@ -391,8 +457,9 @@ svg {
   fill: #fff;
   transition: opacity .25s;
   opacity: .85;
-  width: 30px;
+  width: 20px;
   height: 30px;
+  
 }
 
 .video-container .v-bigPlayButton svg * {
@@ -411,7 +478,11 @@ svg {
   transform: translateX(-50%) translateY(-50%);
 }
 
-container .v-controlBarContent svg * {
+.container .v-controlBarContent svg * {
   fill: #8C74B2;
 }
+
+
+
+
 
