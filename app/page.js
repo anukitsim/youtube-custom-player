@@ -9,6 +9,8 @@ export default function Home() {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [progress, setProgress] = useState(0);
+
+
   
 
   function formatTime(timeInSeconds) {
@@ -111,9 +113,8 @@ export default function Home() {
       window.onYouTubeIframeAPIReady = null;
     };
   }, []);
-
   const togglePlayPause = () => {
-    if (player) {
+    if (player && typeof player.playVideo === 'function' && typeof player.pauseVideo === 'function') {
       if (isPlaying) {
         player.pauseVideo();
       } else {
@@ -122,6 +123,7 @@ export default function Home() {
       }
     }
   };
+  
 
   const handleBigPlayButtonClick = () => {
     togglePlayPause();
@@ -194,6 +196,41 @@ export default function Home() {
       }
     };
   }, [player]);
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      // Check if the pressed key is 'F' (case-insensitive) and not inside an input element
+      if (event.key.toLowerCase() === 'f' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+        handleFullscreenToggle();
+      }
+    };
+
+    // Add event listener for the 'keydown' event
+    document.addEventListener('keydown', handleKeyDown);
+
+    // Remove event listener when component unmounts
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []); 
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      // Check if the pressed key is the spacebar and not inside an input element
+      if (event.key === ' ' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+        togglePlayPause();
+      }
+    };
+  
+    // Add event listener for the 'keydown' event
+    document.addEventListener('keydown', handleKeyDown);
+  
+    // Remove event listener when component unmounts
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [togglePlayPause]);
+  
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
