@@ -204,9 +204,13 @@
   animation: loader 1.4s ease-in-out infinite both;
 }
 
-.v-vlite.v-paused:not(.v-firstStart) .v-poster, .v-vlite.v-playing .v-bigPlayButton, .v-vlite.v-playing .v-poster {
-  visibility: hidden;
-  opacity: 0;
+.ytp-pause-overlay-container::shadow .ytp-pause-overlay[aria-hidden="true"] {
+  display: none !important;
+}
+
+.ytp-pause-overlay-container::shadow .ytp-pause-overlay, 
+.ytp-pause-overlay-container::shadow .ytp-suggestion-set {
+  display: none !important;
 }
 
 
@@ -277,11 +281,11 @@ svg {
 .v-vlite .v-controlBar {
   position: absolute;
   
-  bottom: -5%;
+  bottom:0;
   left: 0;
   width: 100%;
-  height: 25px;
-  padding-top: 3px;
+  height: 15px;
+  
   text-align: right;
  
 
@@ -291,6 +295,11 @@ svg {
   box-sizing: border-box;
 
 }
+
+.video-container:fullscreen .v-vlite .v-controlBar {
+  height: 50px;
+}
+
 .v-vlite .v-progressBar {
   position: absolute;
   top: 0;
@@ -340,27 +349,29 @@ svg {
 }
 
 
+
+
 .video-container .v-controlBarContent {
   display: flex;
   z-index: 5;
   align-items: center;
   justify-content: space-between;
   padding: 15px;
-  width: 100%;
+  width: 100%; 
   background-color: white;
- 
 }
 
 .v-vlite .v-playPauseButton {
   position: relative;
   width: 30px;
   cursor: pointer;
+  margin-right: 10px; 
 }
 
 .v-vlite .v-time {
   color: #fff;
   font-size: 12px;
-  float: left;
+margin-right: 10px;
   height: 100%;
   display: flex;
   align-items: center;
@@ -371,22 +382,28 @@ svg {
   padding-top: 3px;
   color: #8C74B2!important;
 }
-
 .v-vlite .v-volume {
+  order: 3;
+  padding-left: 5%;
   position: relative;
   display: inline-block;
-  width: 40px;
+  width: 50px; /* Adjust the width as needed */
   height: 100%;
   cursor: pointer;
+  
 }
+
+
+
+
 
 .v-volume:not(.v-muted) .v-iconVolumeHigh {
   display: block;
 }
 
 .v-vlite .v-volume .v-playerIcon {
-  display: none;
   position: absolute;
+  margin-right: 10px;
   top: 50%;
   left: 50%;
   -webkit-transform: translateX(-50%) translateY(-50%);
@@ -394,7 +411,7 @@ svg {
 }
 
 .v-vlite .v-volume svg {
-  fill: #fff;
+  fill: #8C74B2;
   transition: opacity .25s;
   opacity: .85;
   width: 18px;
@@ -402,7 +419,7 @@ svg {
 }
 
 .v-vlite .v-volume .v-playerIcon {
-  display: none;
+ 
   position: absolute;
   top: 50%;
   left: 50%;
@@ -411,11 +428,12 @@ svg {
 }
 
 .v-vlite .v-volume svg {
-  fill: #fff;
+  fill: #8C74B2;
   transition: opacity .25s;
   opacity: .85;
   width: 18px;
   height: 18px;
+  z-index: 100;
 }
 
 .v-vlite .v-fullscreen {
@@ -481,7 +499,3 @@ svg {
 .container .v-controlBarContent svg * {
   fill: #8C74B2;
 }
-
-
-
-

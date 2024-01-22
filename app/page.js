@@ -4,11 +4,14 @@ import React, { useEffect, useRef, useState } from "react";
 
 export default function Home() {
   const playerRef = useRef(null);
+  const iframeRef = useRef(null);
   const [player, setPlayer] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [progress, setProgress] = useState(0);
+  const [isMuted, setIsMuted] = useState(false);
+const [volume, setVolume] = useState(50);
 
 
   
@@ -81,6 +84,10 @@ export default function Home() {
           },
           onReady: (event) => {
             setDuration(event.target.getDuration());
+            event.target.setVolume(volume);
+        event.target.unMute();
+
+        
           },
           onPlaybackQualityChange: (event) => {
             setDuration(event.target.getDuration());
@@ -95,6 +102,8 @@ export default function Home() {
       });
 
       setPlayer(newPlayer);
+
+      
     };
 
     if (!window.YT) {
@@ -108,11 +117,18 @@ export default function Home() {
       loadPlayer();
     }
 
+ 
+
     return () => {
       clearInterval(interval);
       window.onYouTubeIframeAPIReady = null;
     };
   }, []);
+
+  
+
+
+  
   const togglePlayPause = () => {
     if (player && typeof player.playVideo === 'function' && typeof player.pauseVideo === 'function') {
       if (isPlaying) {
@@ -230,6 +246,21 @@ export default function Home() {
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [togglePlayPause]);
+
+  const toggleMute = () => {
+    if (player && typeof player.isMuted === 'function' && typeof player.unMute === 'function') {
+      if (isMuted) {
+        player.unMute();
+        setVolume(50); // Set to a default volume level when unmuting
+      } else {
+        player.mute();
+      }
+      setIsMuted(!isMuted);
+    }
+  };
+
+  
+
   
 
   return (
@@ -336,17 +367,21 @@ export default function Home() {
                 <span className="v-duration">{formatTime(duration)}</span>
               </div>
               <div className="v-volume">
-                <span className="v-playerIcon v-iconVolumeHigh">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 34 32">
-                    <path d="M27.814 28.814a1.5 1.5 0 0 1-1.061-2.56C29.492 23.515 31 19.874 31 16.001s-1.508-7.514-4.247-10.253a1.5 1.5 0 1 1 2.121-2.121C32.179 6.932 34 11.327 34 16.001s-1.82 9.069-5.126 12.374a1.495 1.495 0 0 1-1.061.439zm-5.329-2.829a1.5 1.5 0 0 1-1.061-2.56c4.094-4.094 4.094-10.755 0-14.849a1.5 1.5 0 1 1 2.121-2.121c2.55 2.55 3.954 5.94 3.954 9.546s-1.404 6.996-3.954 9.546a1.495 1.495 0 0 1-1.061.439zm-5.328-2.828a1.5 1.5 0 0 1-1.061-2.56 6.508 6.508 0 0 0 0-9.192 1.5 1.5 0 1 1 2.121-2.121c3.704 3.704 3.704 9.731 0 13.435a1.495 1.495 0 0 1-1.061.439zM13 30a1 1 0 0 1-.707-.293L4.586 22H1a1 1 0 0 1-1-1V11a1 1 0 0 1 1-1h3.586l7.707-7.707A1 1 0 0 1 14 3v26a1.002 1.002 0 0 1-1 1z"></path>
-                  </svg>
-                </span>
-                <span className="v-playerIcon v-iconVolumeMute">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-                    <path d="M13 30a1 1 0 0 1-.707-.293L4.586 22H1a1 1 0 0 1-1-1V11a1 1 0 0 1 1-1h3.586l7.707-7.707A1 1 0 0 1 14 3v26a1.002 1.002 0 0 1-1 1z"></path>
-                  </svg>
-                </span>
-              </div>
+  <span
+    className={`v-playerIcon ${isMuted ? 'v-iconVolumeMute' : 'v-iconVolumeHigh'}`}
+    onClick={toggleMute}
+  >
+    {isMuted ? (
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+        <path d="M13 30a1 1 0 0 1-.707-.293L4.586 22H1a1 1 0 0 1-1-1V11a1 1 0 0 1 1-1h3.586l7.707-7.707A1 1 0 0 1 14 3v26a1.002 1.002 0 0 1-1 1z"></path>
+      </svg>
+    ) : (
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 34 32">
+        <path d="M27.814 28.814a1.5 1.5 0 0 1-1.061-2.56C29.492 23.515 31 19.874 31 16.001s-1.508-7.514-4.247-10.253a1.5 1.5 0 1 1 2.121-2.121C32.179 6.932 34 11.327 34 16.001s-1.82 9.069-5.126 12.374a1.495 1.495 0 0 1-1.061.439zm-5.329-2.829a1.5 1.5 0 0 1-1.061-2.56c4.094-4.094 4.094-10.755 0-14.849a1.5 1.5 0 1 1 2.121-2.121c2.55 2.55 3.954 5.94 3.954 9.546s-1.404 6.996-3.954 9.546a1.495 1.495 0 0 1-1.061.439zm-5.328-2.828a1.5 1.5 0 0 1-1.061-2.56 6.508 6.508 0 0 0 0-9.192 1.5 1.5 0 1 1 2.121-2.121c3.704 3.704 3.704 9.731 0 13.435a1.495 1.495 0 0 1-1.061.439zM13 30a1 1 0 0 1-.707-.293L4.586 22H1a1 1 0 0 1-1-1V11a1 1 0 0 1 1-1h3.586l7.707-7.707A1 1 0 0 1 14 3v26a1.002 1.002 0 0 1-1 1z"></path>
+      </svg>
+    )}
+  </span>
+</div>
               <div className="v-fullscreen " onClick={handleFullscreenToggle}>
                 <span className="v-playerIcon v-iconFullscreen">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
